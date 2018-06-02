@@ -33,7 +33,6 @@ char PeekSign(const operstack *signstack);
 
 
 int main() {
-	
 	char str[SIZE];
 	printf("Enter expression: ");
 	fgets(str, SIZE, stdin);
@@ -47,49 +46,56 @@ void Eval(char *str) {
 	operstack signstack;
 	signstack.size = 0;
 	double result = 0.0;
-	size_t i = 0;
-
-	result = Number(str, &i);
-	printf("\n\n%f\n", result);
-	PushStack(&stack, result);
-	printf("\n");
-	PrintStack(&stack, PrintStackValue);
-
-	sign = expr(str, &i);
-	//if (PeekSign(&signstack)==0) {
+	size_t i = 0, a = 0;
+	//while(str[a]!='\0') {
+		result = Number(str, &i);
+		PushStack(&stack, result);
+		//if(str[a+1] == '\0') {
+		//	break;
+		//}
+		sign = expr(str, &i);
 		push_oper_stack(&signstack, sign);
+		result = Number(str, &i);
+		PushStack(&stack, result);
+		n = PeekSign(&signstack);
+		//if (n == '*' || n == '/') {
+		//	break;
+		//}
+
+	//	++a;
 	//}
-
-	result = Number(str, &i);
-	printf("\n\n%f\n", result);
-	PushStack(&stack, result);
-	printf("\n");
-	PrintStack(&stack, PrintStackValue);
-
-	
 	n = PeekSign(&signstack);
-	sign = expr(str, &i);
-	//if (n==0) {
-		push_oper_stack(&signstack,sign);
-	//}
-	if (n == '*' || n == '/') 
-	{
-		result = calc_multiple(&stack, &signstack); //add проверка peek 
-		PushStack(&stack, result);
-		if (result == -1) {
-			printf("Division by zero");
-			exit(-1);
+	printf("\nn=%c\n", n);
+	//PrintStack(&stack, PrintStackValue);
+		//n = PeekSign(&signstack);
+		//if (n == STACK_UNDERFLOW) {
+			//push_oper_stack(&signstack,sign);
+			//n = PeekSign(&signstack);
+		//}
+	printf("\n\nsignstack: %c\n", PeekSign(&signstack));
+	printf("sign = %c\n", n);
+		if (n == '*' || n == '/') 
+		{
+			result = calc_multiple(&stack, &signstack); //add проверка peek 
+			PushStack(&stack, result);
+			if (result == -1) {
+				printf("Division by zero");
+				exit(-1);
+			}
+			//push_oper_stack(&signstack, sign);
 		}
-	}
-		push_oper_stack(&signstack, sign);
-	if ((n == '+') || 
-		(n == '-'))
-	{
-		result = calc_sum(&stack, &signstack);
-		PushStack(&stack, result);
-		push_oper_stack(&signstack, sign);
-	}
+		
+		if ((n == '+') || (n == '-'))
+		{
+			result = calc_sum(&stack, &signstack);
+			PushStack(&stack, result);
+			//push_oper_stack(&signstack, sign);
+		}
+
+		
 	printf("\n\nresultat: %lf\n", peek(&stack));
+	PrintStack(&stack, PrintStackValue);
+	printf("\n\nsignstack: %c\n", PeekSign(&signstack));
 
 }
 
@@ -98,11 +104,11 @@ double Number(char *str, size_t *idx) {
 	double div = 10.0;
 	int sign = 1;
  
-	if (str[*idx] == '-')
-	{
-		sign = -1;
-		++*idx;
-	}
+	//if (str[*idx] == '-')
+	//{
+	//	sign = -1;
+	//	++*idx;
+	//}
  
 	while (str[*idx] >= '0' && str[*idx] <= '9')
 	{
@@ -123,14 +129,13 @@ double Number(char *str, size_t *idx) {
 			++*idx;
 		}
 	}
-
-	return sign * result;
+	
+	return result; //*sign;
 
 }
 
 char expr(char *str, size_t *idx) {
-	char sign;
-	//char sign = multiple(str, idx);
+	char sign = multiple(str, idx);
 	while (str[*idx] == '+' || str[*idx] == '-')
     {
 	switch (str[*idx])
@@ -180,12 +185,12 @@ double calc_multiple(stack_t *stack, operstack *signstack) {
 		{
 			case '*':
 			result = PopStack(stack);
-			result *= PopStack(stack);
+			result = PopStack(stack)*result;
 			break;
 			case '/':
 			result = PopStack(stack);
 			if (peek(stack)!=0) {
-				result /= PopStack(stack);
+				result = PopStack(stack)/result;
 			}
 			else {
 				return -1;
@@ -197,17 +202,17 @@ double calc_multiple(stack_t *stack, operstack *signstack) {
 
 double calc_sum(stack_t *stack, operstack *signstack) {
 	char sign;
-	double result = 0.0;
+	double result = 0.0; 
 	sign = PopSign(signstack);
 	switch (sign)
 	{
 		case '+':
 		result = PopStack(stack);
-		result += PopStack(stack);
+		result = PopStack(stack)+result;
 		break;
-		case '-':
+		case '-': 
 		result = PopStack(stack);
-		result -= PopStack(stack);
+		result = PopStack(stack) - result;
 		break;
 	}
 	return result;
@@ -257,6 +262,9 @@ void PrintStack(const stack_t *stack, void (*printStackValue)(const double)) {
 	}
 	printf("\n");
 }
+
+
+
 
 char PopSign(operstack *signstack) { //rename
     if (signstack->size <= 0) {
