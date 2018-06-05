@@ -46,13 +46,17 @@ void Eval(char *str) {
 	signstack.size = 0;
 	double result = 0.0;
 	size_t i = 0;
+
+	result = Number(str, &i);
+	PushStack(&stack, result);
 	sign = summ(str, &i);
-	//PushStack(&stack, result);
-	//sign = summ(str, &i);
-	//push_oper_stack(&signstack, sign);
-	//result = Number(str, &i);
-	//PushStack(&stack, result);
+	push_oper_stack(&signstack, sign);
+	PushStack(&stack, result);
+
+	result = Number(str, &i);
+	PushStack(&stack, result);
 	n = PeekSign(&signstack);
+
 	if (n == '*' || n == '/') 
 	{
 		result = calc_multiple(&stack, &signstack); //add проверка peek 
@@ -76,13 +80,13 @@ void Eval(char *str) {
 double Number(char *str, size_t *idx) {
 	double result = 0.0;
 	double div = 10.0;
-	int sign = 1;
+	//int sign = 1;
  
-	if (str[*idx] == '-')
-	{
-		sign = -1;
-		++*idx;
-	}
+	//if (str[*idx] == '-')
+	//{
+	//	sign = -1;
+	//	++*idx;
+	//}
  
 	while (str[*idx] >= '0' && str[*idx] <= '9')
 	{
@@ -103,7 +107,7 @@ double Number(char *str, size_t *idx) {
 			++*idx;
 		}
 	}
-	return result*sign;
+	return result;//*sign;
 
 }
 
