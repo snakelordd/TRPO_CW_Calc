@@ -21,23 +21,21 @@ void push_oper_stack(operstack *signstack, const char value); //заполнен
 double PopStack(stack_t *stack); // удаление вершины стека
 double peek(const stack_t *stack);
 char PopSign(operstack *signstack); // возвращает текущий элемент с вершины стека
-void PrintStackValue(const double value);
-void PrintStack(const stack_t *stack, void (*printStackValue)(const double));
 double Number(char *str, size_t *idx);
 void Eval(char *str);
-char expr(char *str, size_t *idx);
+char summ(char *str, size_t *idx);
 char multiple(char *str, size_t *idx);
 double calc_multiple(stack_t *stack, operstack *signstack);
 double calc_sum(stack_t *stack, operstack *signstack);
 char PeekSign(const operstack *signstack);
-
-
 int main() {
 	
 	char str[SIZE];
+	while(1) {
 	printf("Enter expression: ");
 	fgets(str, SIZE, stdin);
 	Eval(str);
+	}
 }
 
 void Eval(char *str) {
@@ -48,30 +46,13 @@ void Eval(char *str) {
 	signstack.size = 0;
 	double result = 0.0;
 	size_t i = 0;
-
-	result = Number(str, &i);
-	printf("\n\n%f\n", result);
-	PushStack(&stack, result);
-	printf("\n");
-	PrintStack(&stack, PrintStackValue);
-
-	sign = expr(str, &i);
-	//if (PeekSign(&signstack)==0) {
-		push_oper_stack(&signstack, sign);
-	//}
-
-	result = Number(str, &i);
-	printf("\n\n%f\n", result);
-	PushStack(&stack, result);
-	printf("\n");
-	PrintStack(&stack, PrintStackValue);
-
-	
+	sign = summ(str, &i);
+	//PushStack(&stack, result);
+	//sign = summ(str, &i);
+	//push_oper_stack(&signstack, sign);
+	//result = Number(str, &i);
+	//PushStack(&stack, result);
 	n = PeekSign(&signstack);
-	sign = expr(str, &i);
-	//if (n==0) {
-		push_oper_stack(&signstack,sign);
-	//}
 	if (n == '*' || n == '/') 
 	{
 		result = calc_multiple(&stack, &signstack); //add проверка peek 
@@ -81,13 +62,12 @@ void Eval(char *str) {
 			exit(-1);
 		}
 	}
-		push_oper_stack(&signstack, sign);
-	if ((n == '+') || 
-		(n == '-'))
+		//push_oper_stack(&signstack, sign);
+	if ((n == '+') || (n == '-'))
 	{
 		result = calc_sum(&stack, &signstack);
 		PushStack(&stack, result);
-		push_oper_stack(&signstack, sign);
+		//push_oper_stack(&signstack, sign);
 	}
 	printf("\n\nresultat: %lf\n", peek(&stack));
 
@@ -123,14 +103,12 @@ double Number(char *str, size_t *idx) {
 			++*idx;
 		}
 	}
-
-	return sign * result;
+	return result*sign;
 
 }
 
-char expr(char *str, size_t *idx) {
-	char sign;
-	//char sign = multiple(str, idx);
+char summ(char *str, size_t *idx) {
+	char sign = multiple(str, idx);
 	while (str[*idx] == '+' || str[*idx] == '-')
     {
 	switch (str[*idx])
@@ -151,7 +129,7 @@ char expr(char *str, size_t *idx) {
 
 
 char multiple(char *str, size_t *idx) {
-
+	double result;
 	char sign;
 	while (str[*idx] == '*' || str[*idx] == '/')
     {
@@ -180,12 +158,12 @@ double calc_multiple(stack_t *stack, operstack *signstack) {
 		{
 			case '*':
 			result = PopStack(stack);
-			result *= PopStack(stack);
+			result = PopStack(stack) * result;
 			break;
 			case '/':
 			result = PopStack(stack);
 			if (peek(stack)!=0) {
-				result /= PopStack(stack);
+				result = PopStack(stack) / result;
 			}
 			else {
 				return -1;
@@ -203,11 +181,11 @@ double calc_sum(stack_t *stack, operstack *signstack) {
 	{
 		case '+':
 		result = PopStack(stack);
-		result += PopStack(stack);
+		result = PopStack(stack) + result;
 		break;
 		case '-':
 		result = PopStack(stack);
-		result -= PopStack(stack);
+		result = PopStack(stack) - result;
 		break;
 	}
 	return result;
@@ -240,23 +218,6 @@ double PopStack(stack_t *stack) {
 }
 
 
-void PrintStackValue(const double value) {
-	printf("%f", value);
-}
- 
-void PrintStack(const stack_t *stack, void (*printStackValue)(const double)) {
-	int i;
-	int len = stack->size - 1;
-	printf("stack %zd > ", stack->size);
-	for (i = 0; i < len; i++) {
-		printStackValue(stack->data[i]);
-		printf(" | ");
-	}
-	if (stack->size != 0) {
-		printStackValue(stack->data[i]);
-	}
-	printf("\n");
-}
 
 char PopSign(operstack *signstack) { //rename
     if (signstack->size <= 0) {
