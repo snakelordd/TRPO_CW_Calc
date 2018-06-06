@@ -25,9 +25,11 @@ double Number(char *str, size_t *idx);
 void Eval(char *str);
 char summ(char *str, size_t *idx);
 char multiple(char *str, size_t *idx);
-double calc_multiple(stack_t *stack, operstack *signstack);
-double calc_sum(stack_t *stack, operstack *signstack);
 char PeekSign(const operstack *signstack);
+double factor(char *str, size_t *idx);
+double brackets(char *str, size_t *idx);
+
+
 int main() {
 	
 	char str[SIZE];
@@ -47,46 +49,20 @@ void Eval(char *str) {
 	double result = 0.0;
 	size_t i = 0;
 
-	result = Number(str, &i);
-	PushStack(&stack, result);
-	sign = summ(str, &i);
-	push_oper_stack(&signstack, sign);
-	PushStack(&stack, result);
-
-	result = Number(str, &i);
-	PushStack(&stack, result);
-	n = PeekSign(&signstack);
-
-	if (n == '*' || n == '/') 
-	{
-		result = calc_multiple(&stack, &signstack); //add проверка peek 
-		PushStack(&stack, result);
-		if (result == -1) {
-			printf("Division by zero");
-			exit(-1);
-		}
-	}
-		//push_oper_stack(&signstack, sign);
-	if ((n == '+') || (n == '-'))
-	{
-		result = calc_sum(&stack, &signstack);
-		PushStack(&stack, result);
-		//push_oper_stack(&signstack, sign);
-	}
-	printf("\n\nresultat: %lf\n", peek(&stack));
+	return summ(str, &i);
 
 }
 
 double Number(char *str, size_t *idx) {
 	double result = 0.0;
 	double div = 10.0;
-	//int sign = 1;
+	int sign = 1;
  
-	//if (str[*idx] == '-')
-	//{
-	//	sign = -1;
-	//	++*idx;
-	//}
+	if (str[*idx] == '-')
+	{
+		sign = -1;
+		++*idx;
+	}
  
 	while (str[*idx] >= '0' && str[*idx] <= '9')
 	{
@@ -107,93 +83,89 @@ double Number(char *str, size_t *idx) {
 			++*idx;
 		}
 	}
-	return result;//*sign;
+	return result*sign;
 
 }
 
 char summ(char *str, size_t *idx) {
-	char sign = multiple(str, idx);
+	double result = multiple(str, idx);
 	while (str[*idx] == '+' || str[*idx] == '-')
     {
 	switch (str[*idx])
 	{
 	case '+':
 		++*idx;
-		sign = '+';
+		result = multiple(str, idx) + result;
 		break;
 	case '-':
 		++*idx;
-		sign = '-';
+		result = multiple(str, idx) - result;
 		break;
 	}
 	}
-	return sign;
+	return result;
 }
 
 
 
 char multiple(char *str, size_t *idx) {
-	double result;
+	double result, div;
 	char sign;
 	while (str[*idx] == '*' || str[*idx] == '/')
     {
-	switch (str[*idx])
-	{
-	case '*':	
+		switch (str[*idx])
+		{
+		case '*':	
 		++*idx;
 		sign = '*';
+		result = factor(str, idx) * result;
+		return result;
 		break;
-	case '/':
+		case '/':
 		++*idx;
 		sign = '/';
+		div = factor(str, idx);
+		if (div == 0) {
+			return -1;
+		} 
+		result = result / div;
+		return result;
 		break;
+		}
 	}
-	}
-	return sign;
+	
 	
 
 }
 
-double calc_multiple(stack_t *stack, operstack *signstack) {
-	char sign;
-	double result = 0.0;
-	sign = PopSign(signstack);
-	switch (sign)
-		{
-			case '*':
-			result = PopStack(stack);
-			result = PopStack(stack) * result;
-			break;
-			case '/':
-			result = PopStack(stack);
-			if (peek(stack)!=0) {
-				result = PopStack(stack) / result;
-			}
-			else {
-				return -1;
-			}
-			break;
-		}
-	return result;
+ 
+double factor(char *str, size_t *idx) {
+    double result;
+    int sign = 1;
+
+ 
+    if (str[*idx] == '-')
+    {
+        sign = -1;
+ 
+        ++*idx;
+    }
+
+    
+
+    if (str[*idx] == '^')
+    {
+        ++*idx;
+ 
+        result = pow(result, factor(str, idx));
+    }
+ 
+    return sign * result;
+
 }
 
-double calc_sum(stack_t *stack, operstack *signstack) {
-	char sign;
-	double result = 0.0;
-	sign = PopSign(signstack);
-	switch (sign)
-	{
-		case '+':
-		result = PopStack(stack);
-		result = PopStack(stack) + result;
-		break;
-		case '-':
-		result = PopStack(stack);
-		result = PopStack(stack) - result;
-		break;
-	}
-	return result;
-}
+
+
 
 
 void PushStack(stack_t *stack, const double value) {

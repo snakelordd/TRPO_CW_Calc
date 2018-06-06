@@ -1,4 +1,4 @@
 CC = gcc
 CFLAGS = -Wall
 all:
-	$(CC) $(CFLAGS) -o exe calc.c
+	$(CC) $(CFLAGS) -o exe calc.c -lm
