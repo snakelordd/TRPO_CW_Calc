@@ -2,8 +2,9 @@ CC = gcc
 CFLAGS = -Wall
 #all:
 #	$(CC) $(CFLAGS) -o exe calc.c -lm
+all: bin build bin/calc 
 
-bin/exe: build/calc.o build/main.o   
+bin/calc: build/calc.o build/main.o   
 	$(CC) $(CFLAGS) build/calc.o build/main.o -o bin/calc -lm
 
 build/main.o: src/calc.c
@@ -15,8 +16,10 @@ build/calc.o: src/calc.c
 build/move.o: src/move.c
 	$(CC) $(CFLAGS) -c src/move.c -o build/move.o 
 	
-#build:
-#	mkdir build
+bin:
+	mkdir bin
+build:
+	mkdir build
 
 .PHONY: clean
 clean:

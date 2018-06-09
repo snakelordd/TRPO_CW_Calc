@@ -1,0 +1,9 @@
+*.o
+.main.c.swp
+main.c~
+*~
+#main.c#
+/calc
+*swp
+bin/
+build/
