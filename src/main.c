@@ -8,7 +8,7 @@ int main() {
 		double result = 0.0;
 		size_t i = 0;
 		result = summ(str, &i);
-		printf("Result = %f\n\n", result);
+		printf("Result = %.2lf\n\n", result);
 	}
 	return 0;
 }

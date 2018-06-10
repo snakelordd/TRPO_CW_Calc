@@ -8,9 +8,9 @@
 
 double number(char *str, size_t *idx);
 
-char summ(char *str, size_t *idx);
+double summ(char *str, size_t *idx);
 
-char multiple(char *str, size_t *idx);
+double multiple(char *str, size_t *idx);
 
 double factor(char *str, size_t *idx);
 

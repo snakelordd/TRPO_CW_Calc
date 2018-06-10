@@ -1,5 +1,6 @@
 #include "calc.h"
 
+
 double number(char *str, size_t *idx) {
 	double result = 0.0;
 	double div = 10.0;
@@ -20,27 +21,27 @@ double number(char *str, size_t *idx) {
 			++*idx;
 		}
 	}
-	return result*sign;
+	return sign * result;
 }
 
-char summ(char *str, size_t *idx) {
+double summ(char *str, size_t *idx) {
 	double result = multiple(str, idx);
 	while (str[*idx] == '+' || str[*idx] == '-') {
-	switch (str[*idx]) {
-	case '+':
-		++*idx;
-		result += multiple(str, idx);
-		break;
-	case '-':
-		++*idx;
-		result -= multiple(str, idx);
-		break;
-	}
+		switch (str[*idx]) {
+		case '+':
+			++*idx;
+			result += multiple(str, idx);
+			break;
+		case '-':
+			++*idx;
+			result -= multiple(str, idx);
+			break;
+		}
 	}
 	return result;
 }
 
-char multiple(char *str, size_t *idx) {
+double multiple(char *str, size_t *idx) {
 	double result, div;
 	result = factor(str, idx);
 	char sign;
@@ -56,7 +57,8 @@ char multiple(char *str, size_t *idx) {
 			sign = '/';
 			div = factor(str, idx);
 			if (div == 0) {
-			return -1;
+				printf("Zero div!");
+				return -1;
 		}
 			result /=  div;
 			break;
