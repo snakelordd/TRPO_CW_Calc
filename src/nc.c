@@ -52,6 +52,7 @@ void interface(char *str)
         a++;
     }*/
     mvaddstr(3, (width-strlen(str))/2, str);
+    wrefresh(win);
     
     
     
@@ -99,10 +100,6 @@ void interface(char *str)
         if (x > 24) {
             x = 24;
         }
-        if ( x == 24 && y == 12) {
-            x = 19;
-            y = 12;
-        }
 
         clear();
         refresh();
@@ -110,7 +107,7 @@ void interface(char *str)
         printw(" x%d y%d \nr%d", x ,y, result);
         mvaddstr(3, (width-strlen(str))/2, str);
         //wrefresh(data);
-        //wrefresh(win);
+        wrefresh(win);
         
          
     }
@@ -129,7 +126,28 @@ void interface(char *str)
 
 int check(char *str, int x, int y, int *i) {
 	if ( x == 4) {
-		if (y == 6) {
+		if (y == 6) {	
+            int t;
+            for (t = 0; t < 20; t++) {
+                //str[*i] = '\0';
+                str[t] = ' ';
+            }         
+		}
+		if (y == 8) {
+			str[*i] = '(';
+			++*i;
+		}
+		if (y == 10) {
+			str[*i] = ')';
+			++*i;
+		}
+		if (y == 12) {
+			str[*i] = '^';
+			++*i;
+		}
+	}
+	if (x == 9) {
+		if ( y == 6){
 			str[*i] = '9';
 			++*i;
 		}
@@ -137,7 +155,7 @@ int check(char *str, int x, int y, int *i) {
 			str[*i] = '6';
 			++*i;
 		}
-		if (y == 10) {
+		if (y ==10) {
 			str[*i] = '3';
 			++*i;
 		}
@@ -145,9 +163,9 @@ int check(char *str, int x, int y, int *i) {
 			str[*i] = '0';
 			++*i;
 		}
-	}
-	if (x == 9) {
-		if ( y == 6){
+	}	
+	if (x == 14){ 
+		if(y == 6) {
 			str[*i] = '8';
 			++*i;
 		}
@@ -155,21 +173,21 @@ int check(char *str, int x, int y, int *i) {
 			str[*i] = '5';
 			++*i;
 		}
-		if (y ==10) {
+		if (y == 10) {
 			str[*i] = '2';
 			++*i;
 		}
-		if (y == 12) {
-			str[*i] = '.';
-			++*i;
+		if ( y == 12) {
+            str[*i] = '.';
+            ++*i; 
 		}
-	}	
-	if (x == 14){ 
+	}
+	if (x == 19)  {
 		if(y == 6) {
 			str[*i] = '7';
 			++*i;
 		}
-		if (y == 8) {
+		if (y == 8){
 			str[*i] = '4';
 			++*i;
 		}
@@ -177,43 +195,36 @@ int check(char *str, int x, int y, int *i) {
 			str[*i] = '1';
 			++*i;
 		}
-		if ( y == 12) {
-			str[*i] = '\0';
-			return *i;
-			++*i;
-		}
-	}
-	if (x == 19)  {
-		if(y == 6) {
-			str[*i] = '/';
-			++*i;
-		}
-		if (y == 8){
-			str[*i] = '*';
-			++*i;
-		}
-		if (y == 10) {
-			str[*i] = '-';
-			++*i;
-		}
 		if (y == 12) {
-			str[*i] = '+';
-			++*i;
+            str[*i] = '\0';
+            return *i;
 		}
 	}
     if ( x == 24) {
         if ( y == 6) {
-            str[*i] = '(';
+            str[*i] = '/';
             ++*i;
         }
         if ( y == 8) {
-            str[*i] = ')';
+            str[*i] = '*';
             ++*i;
         }
         if ( y == 10) {
-            str[*i] = '^';
+            str[*i] = '-';
             ++*i;
         }
+        if ( y == 12) {
+            str[*i] = '+';
+            ++*i;
+        }
+    }
+    if ( *i > 20) {
+        int t;
+        for (t = 0; t < 20; t++) {
+            //str[*i] = '\0';
+            str[t] = ' ';
+        }
+        return 1;
     }
 	
 	return 0;
@@ -230,7 +241,8 @@ void digit(WINDOW *win) {
     WINDOW *data = newwin(data_height, data_width, 1, 1);
     box(data, 0, 0);
 
-    
+    mvprintw(y, x, "[C]");
+    x = x + 5;
     mvprintw(y, x, "[9]");
     x = x + 5;
     mvprintw(y, x, "[8]");
@@ -238,10 +250,10 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[7]");
     x = x + 5;
     mvprintw(y, x, "[/]");
-    x = x + 5;
-    mvprintw(y, x, "[(]");
     x = 5;
     y = y + 2;
+    mvprintw(y, x, "[(]");
+    x = x + 5;
     mvprintw(y, x, "[6]");
     x = x + 5;
     mvprintw(y, x, "[5]");
@@ -249,10 +261,10 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[4]");
     x = x + 5;
     mvprintw(y, x, "[*]");
-    x = x + 5;
-    mvprintw(y, x, "[)]");
     x = 5;
     y = y + 2;
+    mvprintw(y, x, "[)]");
+    x = x + 5;
     mvprintw(y, x, "[3]");
     x = x + 5;
     mvprintw(y, x, "[2]");
@@ -260,10 +272,10 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[1]");
     x = x + 5;
     mvprintw(y, x, "[-]");
-    x = x + 5;
-    mvprintw(y, x, "[^]");
     x = 5;
     y = y + 2;
+    mvprintw(y, x, "[^]");
+    x = x + 5;
     mvprintw(y, x, "[0]");
     x = x + 5;
     mvprintw(y, x, "[.]");
@@ -271,6 +283,8 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[=]");
     x = x + 5;
     mvprintw(y, x, "[+]");
+    x = x + 5;
+    
     wrefresh(win);  
     wrefresh(data);  
 }

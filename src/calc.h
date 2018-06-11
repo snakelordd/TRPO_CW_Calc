@@ -6,7 +6,7 @@
 #include <math.h>
 #include <ncurses.h>
 #include <string.h>
-#define SIZE 1024
+#define SIZE 30
 
 
 double number(char *str, size_t *idx);

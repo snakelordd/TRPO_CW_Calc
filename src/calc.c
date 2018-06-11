@@ -57,8 +57,8 @@ double multiple(char *str, size_t *idx) {
 			sign = '/';
 			div = factor(str, idx);
 			if (div == 0) {
-				printf("Zero div!");
-				exit(-2);
+				printw("Zero div!");
+				//exit(-2);
 		}
 			result /=  div;
 			break;
@@ -89,8 +89,11 @@ double brackets(char *str, size_t *idx){
 		++*idx;
 		result = summ(str, idx);
 		if (str[*idx] != ')') {
-			printf("Brackets unbalanced!\n");
-			exit(-2);
+			char err[] = "Brackets unbalanced!";
+			mvaddstr(3, (33-strlen(err))/2, err);
+			//printw("Brackets unbalanced!\n");
+			//exit(-2);
+			return ;
 		}
 		++*idx;
 	}
