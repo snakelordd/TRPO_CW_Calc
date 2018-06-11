@@ -72,6 +72,11 @@ void interface(char *str) {
 		if (x > 24) {
 			x = 24;
 		}
+		if ( ch == 'q') {
+			delwin(win);
+			endwin();
+			exit(0);
+		}
 		
 		clear();
 		refresh();
