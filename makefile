@@ -1,7 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-#all:
-#	$(CC) $(CFLAGS) -o exe calc.c -lm
+
 all: bin build build/src/ build/test/ bin/calc bin/test
 
 bin/calc: build/src/calc.o build/src/main.o  build/src/interface.o build/src/digit.o build/src/check.o  
@@ -30,6 +29,9 @@ build/test/test.o: test/test.c
 
 build/test/main.o: test/main.c
 	$(CC) $(CFLAGS) -c test/main.c -o build/test/main.o -Ithirdparty
+
+test: ./bin/test
+	./bin/test
 
 bin:
 	mkdir bin
