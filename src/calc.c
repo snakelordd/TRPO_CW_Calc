@@ -56,6 +56,7 @@ double multiple(char *str, size_t *idx) {
 			if (div == 0) {
 				char err[] = "Division by 0!";
 				mvaddstr(2, 5, err);
+				return -0.000001;
 		}
 			result /=  div;
 			break;
@@ -88,7 +89,7 @@ double brackets(char *str, size_t *idx){
 		if (str[*idx] != ')') {
 			char err[] = "Brackets unbalanced!";
 			mvaddstr(2, 5, err);
-			return 0;
+			return -0.000001;
 		}
 		++*idx;
 	}
