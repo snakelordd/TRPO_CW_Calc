@@ -1,10 +1,12 @@
 #include "calc.h"
 
+
 int main() {
-	char str[SIZE];
+	char str[SIZE] = " ";
 	while(1) {
-		printf("Enter expression: ");
-		fgets(str, SIZE, stdin);
+		interface(str);
+		//printf("Enter expression: ");
+		//fgets(str, SIZE, stdin);
 		double result = 0.0;
 		size_t i = 0;
 		result = summ(str, &i);
