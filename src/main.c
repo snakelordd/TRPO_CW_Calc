@@ -2,7 +2,7 @@
 
 
 int main() {
-	char str[SIZE] = " ";
+	char str[SIZE] = {' '};
 	while(1) {
 		interface(str);
 	}

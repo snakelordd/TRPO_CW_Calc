@@ -44,21 +44,18 @@ double summ(char *str, size_t *idx) {
 double multiple(char *str, size_t *idx) {
 	double result, div;
 	result = factor(str, idx);
-	char sign;
 	while (str[*idx] == '*' || str[*idx] == '/') {
 		switch (str[*idx]) {
 		case '*':
 			++*idx;
-			sign = '*';
 			result *= factor(str, idx);
 			break;
 		case '/':
 			++*idx;
-			sign = '/';
 			div = factor(str, idx);
 			if (div == 0) {
-				//mvprintw( 2, 15, "Zero div!");
-				//exit(-2);
+				char err[] = "Division by 0!";
+				mvaddstr(2, 5, err);
 		}
 			result /=  div;
 			break;
@@ -90,10 +87,8 @@ double brackets(char *str, size_t *idx){
 		result = summ(str, idx);
 		if (str[*idx] != ')') {
 			char err[] = "Brackets unbalanced!";
-			mvaddstr(3, (33-strlen(err))/2, err);
-			//printw("Brackets unbalanced!\n");
-			//exit(-2);
-			return ;
+			mvaddstr(2, 5, err);
+			return 0;
 		}
 		++*idx;
 	}
