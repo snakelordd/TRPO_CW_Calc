@@ -58,7 +58,7 @@ double multiple(char *str, size_t *idx) {
 			div = factor(str, idx);
 			if (div == 0) {
 				printf("Zero div!");
-				return -1;
+				exit(-2);
 		}
 			result /=  div;
 			break;

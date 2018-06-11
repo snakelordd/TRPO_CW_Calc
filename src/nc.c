@@ -10,7 +10,7 @@
 }*/
 void interface(char *str)
 {
-	const int width = 28;
+	const int width = 33;
     const int height = 15;
     
     
@@ -28,10 +28,10 @@ void interface(char *str)
 
     WINDOW *win = newwin(height, width, 0, 0);
     
-    char text[] = "Enter expression";
+    //char text[] = "Enter expression";
     int result = 0;
 
-    mvaddstr(3, (width-strlen(text))/2, text);
+    //mvaddstr(3, (width-strlen(text))/2, text);
     
     box(win, 0, 0);
 
@@ -51,10 +51,11 @@ void interface(char *str)
         str[i] = a;
         a++;
     }*/
-
+    mvaddstr(3, (width-strlen(str))/2, str);
     
     
-
+    
+    
     while(1)
     {
        
@@ -80,7 +81,7 @@ void interface(char *str)
         if (ch == KEY_RIGHT) {
         	x = x + 5;
         }
-        if (ch == '\n') {
+        if (ch == '\n') {            
 			result = check(str, x, y, &i);	
 			if (result != 0) {
 				break;
@@ -95,8 +96,12 @@ void interface(char *str)
         if (x < 4) {
             x = 4;
         }
-        if (x > 19) {
+        if (x > 24) {
+            x = 24;
+        }
+        if ( x == 24 && y == 12) {
             x = 19;
+            y = 12;
         }
 
         clear();
@@ -109,6 +114,7 @@ void interface(char *str)
         
          
     }
+    
     //int i;
     //for (i = 0; i < result; i++) {
     //	printw("%c", str[i]);
@@ -122,7 +128,6 @@ void interface(char *str)
 }
 
 int check(char *str, int x, int y, int *i) {
-	
 	if ( x == 4) {
 		if (y == 6) {
 			str[*i] = '9';
@@ -196,6 +201,20 @@ int check(char *str, int x, int y, int *i) {
 			++*i;
 		}
 	}
+    if ( x == 24) {
+        if ( y == 6) {
+            str[*i] = '(';
+            ++*i;
+        }
+        if ( y == 8) {
+            str[*i] = ')';
+            ++*i;
+        }
+        if ( y == 10) {
+            str[*i] = '^';
+            ++*i;
+        }
+    }
 	
 	return 0;
 
@@ -206,7 +225,7 @@ void digit(WINDOW *win) {
 	int x = 5;
     int y = 6;
     const int data_height = 4;
-    const int data_width = 26;
+    const int data_width = 31;
 
     WINDOW *data = newwin(data_height, data_width, 1, 1);
     box(data, 0, 0);
@@ -219,6 +238,8 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[7]");
     x = x + 5;
     mvprintw(y, x, "[/]");
+    x = x + 5;
+    mvprintw(y, x, "[(]");
     x = 5;
     y = y + 2;
     mvprintw(y, x, "[6]");
@@ -228,6 +249,8 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[4]");
     x = x + 5;
     mvprintw(y, x, "[*]");
+    x = x + 5;
+    mvprintw(y, x, "[)]");
     x = 5;
     y = y + 2;
     mvprintw(y, x, "[3]");
@@ -237,6 +260,8 @@ void digit(WINDOW *win) {
     mvprintw(y, x, "[1]");
     x = x + 5;
     mvprintw(y, x, "[-]");
+    x = x + 5;
+    mvprintw(y, x, "[^]");
     x = 5;
     y = y + 2;
     mvprintw(y, x, "[0]");
