@@ -57,7 +57,7 @@ double multiple(char *str, size_t *idx) {
 			sign = '/';
 			div = factor(str, idx);
 			if (div == 0) {
-				printw("Zero div!");
+				//mvprintw( 2, 15, "Zero div!");
 				//exit(-2);
 		}
 			result /=  div;

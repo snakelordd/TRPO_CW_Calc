@@ -23,7 +23,7 @@ void clrscr(void);
 
 void digit(WINDOW *win);
 
-int check(char *str, int x, int y, int *i);
+int check(char *str, int x, int y, size_t *i);
 
 void interface(char *str);
 

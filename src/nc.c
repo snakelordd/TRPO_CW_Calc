@@ -8,12 +8,22 @@
     return 0;
 
 }*/
+
+
 void interface(char *str)
 {
 	const int width = 33;
     const int height = 15;
-    
-    
+    char empty[25];
+
+    double result = 0.0;
+    size_t cnt = 0;
+
+    for (cnt = 0; cnt < 25; cnt++) {
+        empty[cnt] = ' ';
+    }
+    empty[24] = '\0';
+    cnt = 0;
 
     if (!initscr())
     {
@@ -29,7 +39,7 @@ void interface(char *str)
     WINDOW *win = newwin(height, width, 0, 0);
     
     //char text[] = "Enter expression";
-    int result = 0;
+    int key = 0;
 
     //mvaddstr(3, (width-strlen(text))/2, text);
     
@@ -44,14 +54,14 @@ void interface(char *str)
     int x = 4;
     int y = 6;
     
-    int i = 0;
+    size_t i = 0;
     /*
     for (i =0; i < 5; i++) {
         char a = 'a';
         str[i] = a;
         a++;
     }*/
-    mvaddstr(3, (width-strlen(str))/2, str);
+    //mvaddstr(3, (width-strlen(str))/2, str);
     wrefresh(win);
     
     
@@ -83,8 +93,9 @@ void interface(char *str)
         	x = x + 5;
         }
         if (ch == '\n') {            
-			result = check(str, x, y, &i);	
-			if (result != 0) {
+			key = check(str, x, y, &i);	
+			if (key != 0) {
+                //mvaddstr(3, (width)/2, empty);
 				break;
 			}
         }
@@ -100,38 +111,41 @@ void interface(char *str)
         if (x > 24) {
             x = 24;
         }
-
+        
         clear();
         refresh();
 
-        printw(" x%d y%d \nr%d", x ,y, result);
-        mvaddstr(3, (width-strlen(str))/2, str);
-        //wrefresh(data);
+        //printw(" x%d y%d \nr%d", x ,y, result);
+        //printw("\n%d %c", ch, ch);
+        //mvaddstr(3, (width-strlen(empty))/2, empty);
+        mvaddstr(3, (width)/6, str);
         wrefresh(win);
-        
-         
     }
-    
-    //int i;
-    //for (i = 0; i < result; i++) {
-    //	printw("%c", str[i]);
-    //}
-    //mvaddstr(1, (width-strlen(str))/2, str);
-
+    mvaddstr(3, width/6, empty);
+    result = summ(str, &cnt);
+    sprintf(str, "%.3lf", result);
+    mvaddstr(3, (width)/6, str);
+    getch();
+    //mvaddstr(3, (width-strlen(empty))/2, empty);
+    int t;
+            for (t = 0; t < 20; t++) {
+                //str[*i] = '\0';
+                str[t] = ' ';
+            }
+            i = 0;
     delwin(win);
-    //delwin(data);
-
     endwin();
 }
 
-int check(char *str, int x, int y, int *i) {
+int check(char *str, int x, int y, size_t *i) {
 	if ( x == 4) {
 		if (y == 6) {	
             int t;
             for (t = 0; t < 20; t++) {
                 //str[*i] = '\0';
                 str[t] = ' ';
-            }         
+            }
+            *i = 0;         
 		}
 		if (y == 8) {
 			str[*i] = '(';
@@ -148,15 +162,15 @@ int check(char *str, int x, int y, int *i) {
 	}
 	if (x == 9) {
 		if ( y == 6){
-			str[*i] = '9';
+			str[*i] = '7';
 			++*i;
 		}
 		if (y == 8) {
-			str[*i] = '6';
+			str[*i] = '4';
 			++*i;
 		}
 		if (y ==10) {
-			str[*i] = '3';
+			str[*i] = '1';
 			++*i;
 		}
 		if (y == 12) {
@@ -184,15 +198,15 @@ int check(char *str, int x, int y, int *i) {
 	}
 	if (x == 19)  {
 		if(y == 6) {
-			str[*i] = '7';
+			str[*i] = '9';
 			++*i;
 		}
 		if (y == 8){
-			str[*i] = '4';
+			str[*i] = '6';
 			++*i;
 		}
 		if (y == 10) {
-			str[*i] = '1';
+			str[*i] = '3';
 			++*i;
 		}
 		if (y == 12) {
@@ -243,33 +257,33 @@ void digit(WINDOW *win) {
 
     mvprintw(y, x, "[C]");
     x = x + 5;
-    mvprintw(y, x, "[9]");
+    mvprintw(y, x, "[7]");
     x = x + 5;
     mvprintw(y, x, "[8]");
     x = x + 5;
-    mvprintw(y, x, "[7]");
+    mvprintw(y, x, "[9]");
     x = x + 5;
     mvprintw(y, x, "[/]");
     x = 5;
     y = y + 2;
     mvprintw(y, x, "[(]");
     x = x + 5;
-    mvprintw(y, x, "[6]");
+    mvprintw(y, x, "[4]");
     x = x + 5;
     mvprintw(y, x, "[5]");
     x = x + 5;
-    mvprintw(y, x, "[4]");
+    mvprintw(y, x, "[6]");
     x = x + 5;
     mvprintw(y, x, "[*]");
     x = 5;
     y = y + 2;
     mvprintw(y, x, "[)]");
     x = x + 5;
-    mvprintw(y, x, "[3]");
+    mvprintw(y, x, "[1]");
     x = x + 5;
     mvprintw(y, x, "[2]");
     x = x + 5;
-    mvprintw(y, x, "[1]");
+    mvprintw(y, x, "[3]");
     x = x + 5;
     mvprintw(y, x, "[-]");
     x = 5;
