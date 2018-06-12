@@ -4,15 +4,15 @@ void interface(char *str) {
     
 	const int width = 33;
 	const int height = 15;
-	char empty[25];
+	char empty[26];
 
 	double result = 0.0;
 	size_t cnt = 0;
 
-	for (cnt = 0; cnt < 25; cnt++) {
+	for (cnt = 0; cnt < 26; cnt++) {
 		empty[cnt] = ' ';
 	}
-	empty[24] = '\0';
+	empty[26] = '\0';
 	cnt = 0;
 
 	if (!initscr())
@@ -81,10 +81,15 @@ void interface(char *str) {
 		clear();
 		refresh();
 
-		//printw(" x%d y%d \nr%d", x ,y);
+		//printw(" x%d y%d ", x ,y);
 		mvaddstr(3, (width)/6, str);
 		wrefresh(win);
 	}
+	mvprintw(y, x, " ");
+	mvprintw(y, x+4, " ");
+	x = 4;
+	y = 6; 
+	//wrefresh(win);
 	mvaddstr(3, width/6, empty);
 	result = summ(str, &cnt);
 	sprintf(str, "%.3lf", result);

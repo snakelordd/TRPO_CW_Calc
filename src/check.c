@@ -4,9 +4,10 @@ int check(char *str, int x, int y, size_t *i) {
 	if ( x == 4) {
 		if (y == 6) {
 			int t;
-			for (t = 0; t < 20; t++) {
+			for (t = 0; t < SIZE; t++) {
 				str[t] = ' ';
 			}
+			str[SIZE] = '\0';
 			*i = 0;
 		}
 		if (y == 8) {
@@ -94,9 +95,9 @@ int check(char *str, int x, int y, size_t *i) {
 			++*i;
 		}
 	}
-	if ( *i > 20) {
+	if ( *i > SIZE) {
 		int t;
-		for (t = 0; t < 20; t++) {
+		for (t = 0; t <=SIZE ; t++) {
 			str[t] = ' ';
 		}
 		return 1;
